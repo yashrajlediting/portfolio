@@ -1,0 +1,136 @@
+import React, { useState } from "react";
+import "./styles.css";
+
+const videos = {
+  podcasts: [
+    "https://www.youtube.com/embed/eAr89R4vhMk?si=0vDhEYFUokFXxOvf",
+    "https://www.youtube.com/embed/x-ViP_l-uhs?si=Em6AUTeX07I3qkgu",
+    "https://www.youtube.com/embed/whM1mYcCVq4?si=GyHwP3Wb1OfGLQ0v",
+    "https://www.youtube.com/embed/dnZaCS-8qS8?si=-nxn-8NzER2npJyq",
+    "https://www.youtube.com/embed/jqAQsAC4GA8?si=aye5gd5Km5qeavLb"
+  ],
+  reels: ["reel1.mp4", "reel2.mp4", "reel3.mp4", "reel4.mp4", "reel5.mp4"],
+  clips: ["clip1.mp4", "clip2.mp4", "clip3.mp4", "clip4.mp4", "clip5.mp4"],
+};
+
+const App = () => {
+  const [selectedVideo, setSelectedVideo] = useState(null);
+  const [isVertical, setIsVertical] = useState(false);
+  const [isYouTube, setIsYouTube] = useState(false);
+
+  const openVideo = (video) => {
+    setSelectedVideo(video);
+    setIsVertical(video.includes("reel") || video.includes("clip"));
+    setIsYouTube(video.includes("youtube.com"));
+  };
+
+  const closeVideo = () => {
+    setSelectedVideo(null);
+    setIsYouTube(false);
+  };
+
+  return (
+    <div className="container">
+      <h1>Portfolio</h1>
+      <Section title="Podcasts" videos={videos.podcasts} openVideo={openVideo} isYouTube={true} />
+      <Section title="Scripted Reels" videos={videos.reels} openVideo={openVideo} isYouTube={false} />
+      <Section title="Podcast Clips" videos={videos.clips} openVideo={openVideo} isYouTube={false} />
+
+      {/* Clients Section */}
+      <div className="section clients">
+        <h2>Previous Clients</h2>
+        <div className="clients-container">
+          <Client name="Tanner Chidester" handle="@tanner.chidester" followers="459K" image="client1.png" />
+          <Client name="Rose Lopiano" handle="@theplantlifechoseus" followers="31.6K" image="client2.png" />
+          <Client name="Ryan Horst" handle="@ryanhorst_" followers="8.5K" image="client3.png" />
+        </div>
+      </div>
+
+      {/* Contact Section */}
+      <div className="section contact">
+        <h2>Contact Me</h2>
+        <img src="yourphoto.jpg" alt="Yashraj Lobiyal" className="profile-pic" />
+        <p>Yashraj Lobiyal</p>
+        <p>Email: yashrajlediting@gmail.com</p>
+        <p>
+          Instagram:{" "}
+          <a href="https://instagram.com/yashrajlobiyal" target="_blank" rel="noopener noreferrer">
+            @yashrajlobiyal
+          </a>
+        </p>
+      </div>
+
+      {/* Video Player Overlay */}
+      {selectedVideo && (
+        <>
+          <div className="video-overlay" onClick={closeVideo}></div>
+          <div className={`video-player-container ${isVertical ? "vertical" : ""}`}>
+            <button className="close-button" onClick={closeVideo}>✕</button>
+            {isYouTube ? (
+              <iframe
+                src={selectedVideo}
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              ></iframe>
+            ) : (
+              <video src={selectedVideo} autoPlay playsInline controls onClick={(e) => e.stopPropagation()}></video>
+            )}
+          </div>
+        </>
+      )}
+    </div>
+  );
+};
+
+const Section = ({ title, videos, openVideo, isYouTube }) => (
+  <div className="section">
+    <h2>{title}</h2>
+    <div className="grid">
+      {videos.map((video, index) => (
+        isYouTube ? (
+          <iframe
+            key={index}
+            src={video}
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            className="yt-video"
+          ></iframe>
+        ) : (
+          <video 
+            key={index} 
+            src={video} 
+            muted 
+            loop
+            onMouseEnter={(e) => e.target.play()} 
+            onMouseLeave={(e) => e.target.pause()} 
+            onClick={() => openVideo(video)}
+          ></video>
+        )
+      ))}
+    </div>
+  </div>
+);
+
+const Client = ({ name, handle, followers, image }) => {
+  const instaUsername = handle.replace("@", ""); // Remove '@' for link
+  return (
+    <div className="client">
+      <img src={image} alt={name} />
+      <p>{name}</p>
+      <p>
+        <a 
+          href={`https://instagram.com/${instaUsername}`} 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="insta-link"
+        >
+          {handle}
+        </a> ({followers})
+      </p>
+    </div>
+  );
+};
+
+export default App;
