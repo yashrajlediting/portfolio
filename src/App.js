@@ -53,7 +53,7 @@ const openVideo = (video) => {
         <p>Email: yashrajlediting@gmail.com</p>
         <p>
           Instagram:{" "}
-          <a href="https://instagram.com/yashrajlobiyal" target="_blank" rel="noopener noreferrer">
+          <a href="https://instagram.com/storytelleryash" target="_blank" rel="noopener noreferrer">
             @yashrajlobiyal
           </a>
         </p>
