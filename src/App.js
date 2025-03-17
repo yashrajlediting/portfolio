@@ -54,7 +54,7 @@ const openVideo = (video) => {
         <p>
           Instagram:{" "}
           <a href="https://instagram.com/storytelleryash" target="_blank" rel="noopener noreferrer">
-            @yashrajlobiyal
+            @storytelleryash
           </a>
         </p>
       </div>
